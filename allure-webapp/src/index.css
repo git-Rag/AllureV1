@@ -111,20 +111,127 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
 .msg-bot { background: var(--fg-soft); border: 1px solid var(--border); align-self: flex-start; }
 .msg-user { border: 1px solid var(--accent); align-self: flex-end; color: var(--accent); }
 
-/* Voice Timeline */
-.timeline {
-  display: flex; gap: 4px; overflow-x: auto; padding-bottom: 20px;
-  scrollbar-width: none;
+/* Redesigned Memory Stream */
+.memory-stream-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 40px;
 }
-.timeline-item {
-  flex: 0 0 120px; height: 160px; border: 1px solid var(--border);
-  display: flex; flex-direction: column; justify-content: flex-end; padding: 12px;
-  transition: transform 0.3s;
-  border-radius: var(--radius-lg);
+
+.memory-card {
+  background: var(--bg);
+  height: 320px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
 }
-.timeline-item:hover { background: var(--fg-soft); transform: translateY(-4px); }
-.timeline-bar { height: 4px; background: var(--accent); width: 0; transition: width 0.5s; }
-.timeline-item:hover .timeline-bar { width: 100%; }
+
+.memory-card:hover {
+  background: var(--surface);
+}
+
+.memory-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  transition: height 0.4s ease;
+}
+
+.memory-card:hover::before {
+  height: 100%;
+}
+
+.memory-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.memory-card:hover::after {
+  left: 100%;
+}
+
+.memory-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.memory-date::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.memory-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1.0;
+  color: var(--fg);
+  z-index: 1;
+  max-width: 8ch;
+}
+
+.memory-vitals {
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0.4;
+  transition: opacity 0.4s ease;
+}
+
+.memory-card:hover .memory-vitals {
+  opacity: 1;
+}
+
+.memory-bg-text {
+  position: absolute;
+  bottom: -20px;
+  right: -10px;
+  font-family: var(--font-display);
+  font-size: 140px;
+  color: var(--fg);
+  opacity: 0.02;
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.memory-card:hover .memory-bg-text {
+  opacity: 0.05;
+  transform: translateY(-10px);
+}
+
+/* Hide old timeline styles if they exist or just overwrite them */
+.timeline { display: none; }
 
 /* Buttons */
 .btn {
