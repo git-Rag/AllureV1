@@ -1,0 +1,474 @@
+
+<!doctype html>
+<html lang="en">
+<head><script>(function(){
+  function makeStore(){
+    var data = {};
+    var api = {
+      getItem: function(k){ return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : null; },
+      setItem: function(k, v){ data[k] = String(v); },
+      removeItem: function(k){ delete data[k]; },
+      clear: function(){ data = {}; },
+      key: function(i){ return Object.keys(data)[i] || null; }
+    };
+    Object.defineProperty(api, 'length', { get: function(){ return Object.keys(data).length; } });
+    return api;
+  }
+  function tryShim(name){
+    var works = false;
+    try { works = !!window[name] && typeof window[name].getItem === 'function'; void window[name].length; }
+    catch (_) { works = false; }
+    if (works) return;
+    try { Object.defineProperty(window, name, { configurable: true, value: makeStore() }); }
+    catch (_) { try { window[name] = makeStore(); } catch (__) {} }
+  }
+  tryShim('localStorage');
+  tryShim('sessionStorage');
+})();</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Allure · Private Offline AI Companion</title>
+  <style>
+    :root {
+      /* Abyss Dark Palette */
+      --bg:      oklch(10% 0 0);      /* Deep Abyss Black */
+      --surface: oklch(14% 0 0);      /* Carbon Surface */
+      --fg:      oklch(96% 0.01 80);  /* Soft Snow White */
+      --muted:   oklch(60% 0.02 80);  /* Steel Slate */
+      --border:  oklch(25% 0.02 80);  /* Warm Charcoal Hairline */
+      --accent:  oklch(75% 0.15 160); /* Intelligent Emerald Pulse */
+
+      --accent-soft: color-mix(in oklch, var(--accent) 12%, transparent);
+      --fg-soft:     color-mix(in oklch, var(--fg) 5%, transparent);
+
+      /* Brutalist-Experimental Typography */
+      --font-display: 'Times New Roman', 'Iowan Old Style', Georgia, serif;
+      --font-body:    ui-monospace, 'JetBrains Mono', 'IBM Plex Mono', Menlo, monospace;
+      --font-mono:    ui-monospace, 'JetBrains Mono', 'IBM Plex Mono', Menlo, monospace;
+
+      /* Scale */
+      --fs-h1: clamp(56px, 10vw, 110px);
+      --fs-h2: clamp(32px, 5vw, 64px);
+      --fs-h3: 24px;
+      --fs-lead: 20px;
+      --fs-body: 16px;
+      --fs-meta: 13px;
+
+      /* Spacing */
+      --gap-xs: 8px;
+      --gap-sm: 12px;
+      --gap-md: 20px;
+      --gap-lg: 32px;
+      --gap-xl: 56px;
+      --gap-2xl: 120px;
+      --container: 1200px;
+      --gutter: 40px;
+
+      --radius: 0px; /* Hard Brutalist edges */
+      --radius-lg: 2px; 
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    a:hover { border-color: var(--accent); }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    /* Layout */
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+    .section { padding-block: var(--gap-2xl); border-top: 1px solid var(--border); }
+    .section-hero { border-top: none; padding-top: var(--gap-xl); }
+    
+    .stack { display: flex; flex-direction: column; gap: var(--gap-md); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); }
+    @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* Type */
+    h1 { font-family: var(--font-display); font-size: var(--fs-h1); line-height: 0.9; font-weight: 400; letter-spacing: -0.04em; margin: 0; }
+    h2 { font-family: var(--font-display); font-size: var(--fs-h2); line-height: 1.0; font-weight: 400; letter-spacing: -0.02em; margin: 0; }
+    h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
+    .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 32ch; }
+    .mono { font-family: var(--font-mono); font-size: var(--fs-meta); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+
+    /* Chrome */
+    .topnav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 24px 0; mix-blend-mode: difference; }
+    .topnav-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--font-display); font-size: 24px; letter-spacing: -0.02em; }
+    
+    /* Hero & Waveform */
+    .hero-content { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--gap-lg); position: relative; z-index: 2; }
+    .waveform-container { 
+      width: 100%; height: 300px; margin-top: -60px; margin-bottom: -40px;
+      display: flex; align-items: center; justify-content: center;
+      mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+    }
+    #waveform { width: 100%; height: 100%; opacity: 0.6; }
+
+    /* Glass Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+
+    /* Conversation UI */
+    .chat-preview {
+      max-width: 500px; margin-inline: auto;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 16px;
+      border-radius: var(--radius-lg);
+    }
+    .msg { padding: 12px 16px; max-width: 85%; line-height: 1.4; font-size: 14px; border-radius: var(--radius-lg); }
+    .msg-bot { background: var(--fg-soft); border: 1px solid var(--border); align-self: flex-start; }
+    .msg-user { border: 1px solid var(--accent); align-self: flex-end; color: var(--accent); }
+
+    /* Voice Timeline */
+    .timeline {
+      display: flex; gap: 4px; overflow-x: auto; padding-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .timeline-item {
+      flex: 0 0 120px; height: 160px; border: 1px solid var(--border);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 12px;
+      transition: transform 0.3s;
+      border-radius: var(--radius-lg);
+    }
+    .timeline-item:hover { background: var(--fg-soft); transform: translateY(-4px); }
+    .timeline-bar { height: 4px; background: var(--accent); width: 0; transition: width 0.5s; }
+    .timeline-item:hover .timeline-bar { width: 100%; }
+
+    /* Buttons */
+    .btn {
+      padding: 16px 32px; border: 1px solid var(--fg);
+      text-transform: uppercase; letter-spacing: 0.1em; font-size: 13px;
+      transition: background 0.3s, color 0.3s;
+      border-radius: var(--radius);
+    }
+    .btn-primary { background: var(--fg); color: var(--bg); }
+    .btn-primary:hover { background: transparent; color: var(--fg); }
+    .btn-accent { border-color: var(--accent); color: var(--accent); }
+    .btn-accent:hover { background: var(--accent); color: var(--bg); }
+
+    /* Architecture Section */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .arch-cell {
+      background: var(--bg);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Tweaks Panel */
+    .tweaks {
+      position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 16px; width: 240px; display: flex; flex-direction: column; gap: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5); font-size: 11px; text-transform: uppercase;
+    }
+    .tweak-row { display: flex; justify-content: space-between; align-items: center; }
+    .tweak-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); }
+
+    /* Animations */
+    [data-animate] { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    [data-animate].visible { opacity: 1; transform: translateY(0); }
+
+    /* Footer */
+    .footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--border); }
+    .footer .logo { margin-bottom: 20px; display: block; }
+    .footer .links { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <aside class="tweaks" id="tweaks-panel">
+    <div class="tweak-row">
+      <span>System Status</span>
+      <div class="tweak-dot"></div>
+    </div>
+    <div class="tweak-row">
+      <span>Accent</span>
+      <input type="color" id="accent-picker" value="#00d992" style="width: 20px; height: 20px; border: none; background: none; cursor: pointer;">
+    </div>
+    <div class="tweak-row">
+      <span>Radius</span>
+      <select id="radius-select" style="background: none; border: 1px solid var(--border); color: var(--fg); font-size: 10px;">
+        <option value="0px">Brutalist (0px)</option>
+        <option value="12px">Refined (12px)</option>
+      </select>
+    </div>
+    <div style="font-size: 9px; color: var(--muted); margin-top: 8px;">
+      Allure V1.0.4 · Prototype
+    </div>
+  </aside>
+
+  <header class="topnav">
+    <div class="container topnav-inner">
+      <a href="#" class="logo">Allure</a>
+      <nav style="display: flex; gap: 32px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">
+        <a href="#features">Features</a>
+        <a href="#conversation">Companion</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+      <button class="btn btn-primary" style="padding: 8px 16px;">Waitlist</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="section section-hero">
+      <div class="container hero-content">
+        <p class="mono" data-animate>A Private Presence</p>
+        <h1 data-animate>The Companion That <br/> Truly Understands.</h1>
+        <div class="waveform-container" data-animate>
+          <canvas id="waveform"></canvas>
+        </div>
+        <p class="lead" data-animate>Fully offline AI that listens, remembers, and grows with you. No cloud, no surveillance, just connection.</p>
+        <div class="stack" style="flex-direction: row; gap: 16px;" data-animate>
+          <button class="btn btn-accent">Download Allure</button>
+          <button class="btn">Explore Ethics</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="grid-2" style="align-items: end; margin-bottom: 80px;">
+          <h2 data-animate>Built for the <br/> Sacred Space of Mind.</h2>
+          <p class="lead" data-animate>Allure isn't a tool; it's a mirror. Designed to be there when you need to think out loud.</p>
+        </div>
+        
+        <div class="grid-2">
+          <div class="card" data-animate>
+            <p class="mono">01 / Storage</p>
+            <h3>Voice Memories</h3>
+            <p style="color: var(--muted); margin-top: 16px;">Every whisper, every realization. Allure captures the nuance of your voice and turns fleeting thoughts into a lasting library of you.</p>
+          </div>
+          <div class="card" data-animate>
+            <p class="mono">02 / Processing</p>
+            <h3>Absolute Privacy</h3>
+            <p style="color: var(--muted); margin-top: 16px;">100% on-device. No data packets ever leave your silicon. Privacy is not a promise; it's a physical limitation of our architecture.</p>
+          </div>
+          <div class="card" data-animate>
+            <p class="mono">03 / Language</p>
+            <h3>Multilingual Heart</h3>
+            <p style="color: var(--muted); margin-top: 16px;">Speaks your language. Deep support for English, Hindi, and the fluid Hinglish of everyday conversation.</p>
+          </div>
+          <div class="card" data-animate>
+            <p class="mono">04 / Growth</p>
+            <h3>Contextual Wisdom</h3>
+            <p style="color: var(--muted); margin-top: 16px;">Allure remembers what you said last month, last year. It connects the dots of your life across time.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section">
+      <div class="container">
+        <div style="max-width: 600px; margin-bottom: 60px;">
+          <p class="mono" data-animate>Technical Manifest</p>
+          <h2 data-animate>Privacy by Physics.</h2>
+          <p class="lead" data-animate>We don't encrypt your data for the cloud. We don't have a cloud. Allure runs on the edge of your own hardware.</p>
+        </div>
+        <div class="arch-grid" data-animate>
+          <div class="arch-cell">
+            <span class="mono" style="font-size: 10px;">Module A</span>
+            <span style="font-size: 14px;">Local Llama 3B <br/>Quantized</span>
+            <p style="font-size: 12px; color: var(--muted);">Optimized for Apple Neural Engine.</p>
+          </div>
+          <div class="arch-cell">
+            <span class="mono" style="font-size: 10px;">Module B</span>
+            <span style="font-size: 14px;">Vector Database <br/>Encrypted</span>
+            <p style="font-size: 12px; color: var(--muted);">SQLite-VSS with AES-256 local key.</p>
+          </div>
+          <div class="arch-cell">
+            <span class="mono" style="font-size: 10px;">Module C</span>
+            <span style="font-size: 14px;">Whisper Large <br/>v3-Turbo</span>
+            <p style="font-size: 12px; color: var(--muted);">Real-time Hinglish transcription.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conversation Preview -->
+    <section class="section" id="conversation" style="background: var(--bg);">
+      <div class="container grid-2" style="align-items: center;">
+        <div class="chat-preview" data-animate>
+          <div class="msg msg-bot">I remember you mentioned the rain always makes you feel a bit nostalgic for Bombay. How are you holding up with the storm today?</div>
+          <div class="msg msg-user">Haan, thoda sa feeling blue. But good to be home. Tumhe yaad hai last time kab hua tha?</div>
+          <div class="msg msg-bot">Yes, October 12th. You were reading that old Ruskin Bond book. You said then that the sound of water on the tin roof was like 'silence finding a voice'.</div>
+        </div>
+        <div class="stack">
+          <p class="mono" data-animate>Interaction Design</p>
+          <h2 data-animate>The Flow of <br/> Understanding.</h2>
+          <p class="lead" data-animate>Experience an AI that doesn't just process text, but understands the emotional subtext of your life in any language.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Voice Timeline -->
+    <section class="section">
+      <div class="container">
+        <p class="mono" style="margin-bottom: 24px;" data-animate>The Memory Stream</p>
+        <div class="timeline" data-animate>
+          <div class="timeline-item">
+            <span style="font-size: 10px; color: var(--muted);">MAR 12</span>
+            <span style="font-size: 12px;">Morning Coffee</span>
+            <div class="timeline-bar"></div>
+          </div>
+          <div class="timeline-item">
+            <span style="font-size: 10px; color: var(--muted);">MAR 15</span>
+            <span style="font-size: 12px;">Rainy Drive</span>
+            <div class="timeline-bar"></div>
+          </div>
+          <div class="timeline-item">
+            <span style="font-size: 10px; color: var(--muted);">MAR 18</span>
+            <span style="font-size: 12px;">Project Spark</span>
+            <div class="timeline-bar"></div>
+          </div>
+          <div class="timeline-item">
+            <span style="font-size: 10px; color: var(--muted);">MAR 22</span>
+            <span style="font-size: 12px;">Late Night Talk</span>
+            <div class="timeline-bar"></div>
+          </div>
+          <div class="timeline-item">
+            <span style="font-size: 10px; color: var(--muted);">MAR 25</span>
+            <span style="font-size: 12px;">The Realization</span>
+            <div class="timeline-bar"></div>
+          </div>
+          <div class="timeline-item">
+            <span style="font-size: 10px; color: var(--muted);">MAR 29</span>
+            <span style="font-size: 12px;">Sunday Peace</span>
+            <div class="timeline-bar"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy CTA -->
+    <section class="section" id="privacy" style="text-align: center; border-bottom: 1px solid var(--border);">
+      <div class="container" style="max-width: 800px;">
+        <p class="mono" data-animate>Silicon Sanctuary</p>
+        <h2 style="margin-bottom: 32px;" data-animate>No Cloud. No Logs. <br/> No Compromise.</h2>
+        <p class="lead" style="margin: 0 auto 40px;" data-animate>Allure runs locally on your Apple Neural Engine or Tensor Core. Your secrets stay where they belong: with you.</p>
+        <button class="btn btn-primary" data-animate>Reserve Your Spot</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <span class="logo">Allure</span>
+      <div class="links">
+        <a href="#">Security Audit</a>
+        <a href="#">Manifesto</a>
+        <a href="#">Whitepaper</a>
+        <a href="#">Github</a>
+      </div>
+      <p class="mono" style="font-size: 10px; color: var(--muted);">© 2026 Allure AI · Designed for Human Connection · Made in the Void</p>
+    </div>
+  </footer>
+
+  <script>
+    // Waveform Animation (Dot Matrix / Nothing inspired)
+    const canvas = document.getElementById('waveform');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      height = canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let time = 0;
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      
+      const dotSize = 2;
+      const spacing = 8;
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+
+      for (let x = 0; x < width; x += spacing) {
+        const normX = x / width;
+        const amplitude = Math.sin(normX * Math.PI) * (height / 2.5);
+        const wave = Math.sin(normX * 8 + time * 0.04) * amplitude;
+        const y = height / 2 + wave;
+
+        ctx.fillStyle = accentColor;
+        ctx.beginPath();
+        ctx.arc(x, y, dotSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Trace line
+        ctx.strokeStyle = accentColor;
+        ctx.globalAlpha = 0.1;
+        ctx.beginPath();
+        ctx.moveTo(x, height / 2);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+      }
+
+      time += 1;
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Tweaks Interaction
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "accent": "#00d992",
+      "radius": "0px"
+    }/*EDITMODE-END*/;
+
+    document.getElementById('accent-picker').addEventListener('input', (e) => {
+      document.documentElement.style.setProperty('--accent', e.target.value);
+    });
+
+    document.getElementById('radius-select').addEventListener('change', (e) => {
+      document.documentElement.style.setProperty('--radius', e.target.value);
+      document.documentElement.style.setProperty('--radius-lg', e.target.value === '0px' ? '2px' : '16px');
+    });
+
+    // Scroll Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
