@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Tweaks: React.FC = () => {
-  const [accent, setAccent] = useState('#00d992');
+  const [accent, setAccent] = useState('#5adf8a');
   const [radius, setRadius] = useState('0px');
 
   const handleAccentChange = (e: React.ChangeEvent<HTMLInputElement>) => {

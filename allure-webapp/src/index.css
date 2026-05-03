@@ -8,10 +8,10 @@
   --border:  oklch(25% 0.02 80);  /* Warm Charcoal Hairline */
   --accent:  #5adf8a;             /* Intelligent Emerald Pulse */
   
-  --bot-border: #1e2e1e;
-  --bot-color:  #8fa88f;
-  --user-border: #2a4a2a;
-  --user-color:  #5adf8a;
+  --bot-border:  color-mix(in srgb, var(--accent) 15%, #2a2a2a);
+  --bot-color:   color-mix(in srgb, var(--accent) 40%, var(--muted));
+  --user-border: var(--accent);
+  --user-color:  var(--accent);
 
   --accent-soft: color-mix(in oklch, var(--accent) 12%, transparent);
   --fg-soft:     color-mix(in oklch, var(--fg) 5%, transparent);
