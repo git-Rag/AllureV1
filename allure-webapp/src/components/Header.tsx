@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onWaitlistClick: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onWaitlistClick }) => {
   return (
     <header className="topnav">
       <div className="container topnav-inner">
@@ -12,7 +16,13 @@ const Header: React.FC = () => {
           <a href="/#privacy">Privacy</a>
           <Link to="/ethics">Ethics</Link>
         </nav>
-        <button className="btn btn-primary" style={{ padding: '8px 16px' }}>Waitlist</button>
+        <button 
+          className="btn btn-primary" 
+          style={{ padding: '8px 16px' }}
+          onClick={onWaitlistClick}
+        >
+          Waitlist
+        </button>
       </div>
     </header>
   );

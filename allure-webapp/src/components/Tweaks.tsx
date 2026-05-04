@@ -7,7 +7,10 @@ const Tweaks: React.FC = () => {
   const handleAccentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setAccent(val);
-    document.documentElement.style.setProperty('--accent', val);
+    // Use requestAnimationFrame to ensure the style update doesn't block the UI thread
+    requestAnimationFrame(() => {
+      document.documentElement.style.setProperty('--accent', val);
+    });
   };
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

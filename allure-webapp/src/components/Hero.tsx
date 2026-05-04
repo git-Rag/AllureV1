@@ -2,7 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Waveform from './Waveform';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onWaitlistClick: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onWaitlistClick }) => {
   return (
     <section className="section section-hero">
       <div className="container hero-content">
@@ -11,7 +15,7 @@ const Hero: React.FC = () => {
         <Waveform />
         <p className="lead" data-animate>Fully offline AI that listens, remembers, and grows with you. No cloud, no surveillance, just connection.</p>
         <div className="stack" style={{ flexDirection: 'row', gap: '16px' }} data-animate>
-          <button className="btn btn-accent">Download Allure</button>
+          <button className="btn btn-accent" onClick={onWaitlistClick}>Join the Waitlist</button>
           <Link to="/ethics" className="btn">Explore Ethics</Link>
         </div>
       </div>

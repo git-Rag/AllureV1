@@ -7,12 +7,16 @@ import Timeline from '../components/Timeline';
 import Privacy from '../components/Privacy';
 import useAnimateOnScroll from '../hooks/useAnimateOnScroll';
 
-const LandingPage: React.FC = () => {
+interface LandingPageProps {
+  onWaitlistClick: () => void;
+}
+
+const LandingPage: React.FC<LandingPageProps> = ({ onWaitlistClick }) => {
   useAnimateOnScroll();
 
   return (
     <>
-      <Hero />
+      <Hero onWaitlistClick={onWaitlistClick} />
       <Features />
       <Architecture />
       <Conversation />

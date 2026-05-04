@@ -52,36 +52,44 @@ const Conversation: React.FC = () => {
 
   useEffect(() => {
     if (!hasStarted) return;
+    let isMounted = true;
 
     const replay = async () => {
       for (const msg of INITIAL_MESSAGES) {
+        if (!isMounted) break;
         if (msg.role === 'bot') {
           const newMsg: Message = { ...msg, content: '', isTyping: true };
           setDisplayedMessages(prev => [...prev, newMsg]);
           await typeText(msg.content, (text) => {
+            if (isMounted) {
+              setDisplayedMessages(prev => {
+                const last = [...prev];
+                const updated = { ...last[last.length - 1], content: text };
+                last[last.length - 1] = updated;
+                return last;
+              });
+            }
+          });
+          if (isMounted) {
             setDisplayedMessages(prev => {
               const last = [...prev];
-              const updated = { ...last[last.length - 1], content: text };
+              const updated = { ...last[last.length - 1], isTyping: false };
               last[last.length - 1] = updated;
               return last;
             });
-          });
-          setDisplayedMessages(prev => {
-            const last = [...prev];
-            const updated = { ...last[last.length - 1], isTyping: false };
-            last[last.length - 1] = updated;
-            return last;
-          });
+          }
         } else {
           setDisplayedMessages(prev => [...prev, msg]);
           await new Promise(resolve => setTimeout(resolve, 800));
         }
       }
-      setIsReplaying(false);
+      if (isMounted) setIsReplaying(false);
     };
 
     replay();
     setIsHeadlineVisible(true);
+
+    return () => { isMounted = false; };
   }, [hasStarted]);
 
   useEffect(() => {
