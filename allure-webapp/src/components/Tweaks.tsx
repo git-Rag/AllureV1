@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Tweaks: React.FC = () => {
-  const [accent, setAccent] = useState('#5adf8a');
+  const [accent, setAccent] = useState('#df5858');
   const [radius, setRadius] = useState('0px');
 
   const handleAccentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -10,6 +10,7 @@ const Tweaks: React.FC = () => {
     // Use requestAnimationFrame to ensure the style update doesn't block the UI thread
     requestAnimationFrame(() => {
       document.documentElement.style.setProperty('--accent', val);
+      window.dispatchEvent(new CustomEvent('accent-change', { detail: val }));
     });
   };
 

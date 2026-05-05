@@ -22,6 +22,7 @@ const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose }) => {
     setIsClosing(true);
     setTimeout(() => {
       onClose();
+      setIsClosing(false);
     }, 400);
   };
 

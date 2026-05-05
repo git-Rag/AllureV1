@@ -11,7 +11,7 @@ Allure is a private, fully offline AI companion designed for deep understanding 
 - **Framework:** [Vite](https://vitejs.dev/) + [React](https://react.dev/) (TypeScript)
 - **Navigation:** [React Router](https://reactrouter.com/)
 - **Styling:** Vanilla CSS with [OKLCH](https://oklch.com/) color space
-- **Animation:** Canvas API (Waveform) & Intersection Observer (Scroll effects)
+- **Animation:** Canvas API (Presence Core) & Intersection Observer (Scroll effects)
 
 ## Getting Started
 
@@ -34,7 +34,7 @@ Allure is a private, fully offline AI companion designed for deep understanding 
    ```
 
 ## Project Structure
-- `src/components/`: Modular UI components (Hero, Waveform, Tweaks, etc.)
+- `src/components/`: Modular UI components (Hero, Presence, Tweaks, etc.)
 - `src/pages/`: Main application views (Landing, Ethics)
 - `src/hooks/`: Custom React hooks (Animations, scroll observers)
 - `src/index.css`: Global design tokens and base styles

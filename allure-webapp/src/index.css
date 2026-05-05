@@ -6,7 +6,7 @@
   --fg:      oklch(96% 0.01 80);  /* Soft Snow White */
   --muted:   oklch(60% 0.02 80);  /* Steel Slate */
   --border:  oklch(25% 0.02 80);  /* Warm Charcoal Hairline */
-  --accent:  #5adf8a;             /* Intelligent Emerald Pulse */
+  --accent:  #df5858;             /* Personalized Crimson Pulse */
   
   --bot-border:  color-mix(in srgb, var(--accent) 15%, #2a2a2a);
   --bot-color:   color-mix(in srgb, var(--accent) 40%, var(--muted));
@@ -63,7 +63,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 /* Layout */
 .container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
 .section { padding-block: var(--gap-2xl); border-top: 1px solid var(--border); }
-.section-hero { border-top: none; padding-top: var(--gap-xl); }
+.section-hero { border-top: none; padding-top: 88px; }
 
 .stack { display: flex; flex-direction: column; gap: var(--gap-md); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-lg); }
@@ -81,14 +81,13 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
 .topnav-inner { display: flex; justify-content: space-between; align-items: center; }
 .logo { font-family: var(--font-display); font-size: 24px; letter-spacing: -0.02em; }
 
-/* Hero & Waveform */
+/* Hero & Presence */
 .hero-content { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--gap-lg); position: relative; z-index: 2; }
-.waveform-container { 
-  width: 100%; height: 300px; margin-top: -60px; margin-bottom: -40px;
+.presence-container { 
+  width: 100%; height: 400px; margin-top: -80px; margin-bottom: -60px;
   display: flex; align-items: center; justify-content: center;
-  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 }
-#waveform { width: 100%; height: 100%; opacity: 0.6; }
+#presence { width: 100%; height: 100%; opacity: 0.8; }
 
 /* Glass Cards */
 .card {
@@ -229,7 +228,7 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
   position: absolute;
   top: -50%; left: -50%; width: 200%; height: 200%;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  animation: noise-anim 0.2s infinite;
+  animation: noise-anim 1s steps(10) infinite;
   pointer-events: none;
 }
 
@@ -243,8 +242,8 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
   background: linear-gradient(to bottom, transparent, var(--accent));
   width: 1px;
   height: 40px;
-  opacity: 0.2;
-  animation: rain-fall 1.5s linear infinite;
+  opacity: 0.1;
+  animation: rain-fall 3s linear infinite;
 }
 
 /* Headline Reveal */
