@@ -22,6 +22,16 @@ const Conversation: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Stabilize atmospheric particles
+  const drops = React.useMemo(() => {
+    return [...Array(20)].map(() => ({
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 2 + Math.random() * 3,
+      opacity: 0.1 + Math.random() * 0.5
+    }));
+  }, []);
+
   // Typewriter effect for initial messages
   const typeText = async (text: string, callback: (current: string) => void) => {
     let current = '';
@@ -146,14 +156,15 @@ const Conversation: React.FC = () => {
         <div className="chat-preview">
           <div className="rain-overlay">
             <div className="noise"></div>
-            {[...Array(10)].map((_, i) => (
+            {drops.map((drop, i) => (
               <div 
                 key={i} 
                 className="rain-drop" 
                 style={{ 
-                  left: `${Math.random() * 100}%`, 
-                  animationDelay: `${Math.random() * 2}s`,
-                  opacity: Math.random() * 0.2
+                  left: `${drop.left}%`, 
+                  animationDelay: `${drop.delay}s`,
+                  animationDuration: `${drop.duration}s`,
+                  opacity: drop.opacity
                 }} 
               />
             ))}

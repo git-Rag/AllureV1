@@ -223,10 +223,14 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.1; /* Increased from 0.03 */
   z-index: 0;
   overflow: hidden;
 }
+
+body.mood-fire .rain-overlay { opacity: 0.2; }
+body.mood-wind .rain-overlay { opacity: 0.15; }
+body.mood-silence .rain-overlay { display: none; }
 
 .rain-overlay * {
   pointer-events: none;
@@ -261,14 +265,15 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
 }
 
 @keyframes fire-flicker {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-  50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-40px) scale(1.8); opacity: 0.9; }
 }
 
 @keyframes wind-drift {
   0% { transform: translateX(-100%) translateY(0); opacity: 0; }
-  50% { opacity: 0.2; }
-  100% { transform: translateX(500%) translateY(20px); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateX(500%) translateY(40px); opacity: 0; }
 }
 
 .rain-drop {
@@ -276,9 +281,22 @@ h3 { font-size: var(--fs-h3); font-weight: 400; text-transform: uppercase; lette
   background: linear-gradient(to bottom, transparent, var(--accent));
   width: 1px;
   height: 40px;
-  opacity: 0.1;
+  opacity: 0.4;
   animation: rain-fall 3s linear infinite;
   will-change: transform;
+}
+
+body.mood-fire .rain-drop { 
+  background: radial-gradient(circle, var(--accent), transparent);
+  width: 6px; height: 6px; border-radius: 50%;
+  filter: blur(2px);
+  animation: fire-flicker 2s ease-in-out infinite;
+}
+
+body.mood-wind .rain-drop {
+  height: 1px; width: 80px;
+  background: linear-gradient(to right, transparent, var(--accent));
+  animation: wind-drift 2s linear infinite;
 }
 
 /* Headline Reveal */
