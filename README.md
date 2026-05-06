@@ -9,16 +9,17 @@ Allure is a private, fully offline AI companion designed for deep understanding 
 
 ## Key Features
 - **Presence Core:** An organic, canvas-based visual representation of the AI that responds to user proximity and system state.
-- **Streaming Interaction:** Real-time, multilingual chat interface with emotional subtext awareness.
-- **Dynamic Themes:** Real-time customization of system accents and interface geometry (Brutalist vs. Refined).
-- **Ethics-First Design:** Transparent disclosure of AI behavior and data privacy principles.
+- **Atmosphere (Moods):** Real-time environmental shifts (Rain, Wind, Fire, Silence) that alter system colors, shaders, and animations.
+- **Architecture Manifests:** Technical deep-dives into the local-first stack, including quantized Llama models and encrypted vector storage.
+- **Memory Fragments:** A high-entropy timeline of past interactions, visualized through dynamic vector paths and latent-space snippets.
+- **Aesthetic Sovereignty:** A brutalist-experimental design built with Vanilla CSS, supporting real-time theme tweaking and organic motion.
 
 ## Tech Stack
 - **Framework:** [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
 - **Navigation:** [React Router 7](https://reactrouter.com/)
 - **Styling:** Vanilla CSS with [OKLCH](https://oklch.com/) color space and CSS Custom Properties
-- **Animation:** Canvas API (Presence Core) & Intersection Observer (Scroll effects)
-- **AI Service:** Streaming integration with Google Gemini (via API) and mock fallback for offline prototyping.
+- **Animation:** Canvas API (Presence Core), SVG-in-JS (Memory Vectors), and Intersection Observer
+- **AI Service:** Integration with local-first inference concepts (Llama 3B, Whisper Turbo) and Gemini API fallback.
 
 ## Getting Started
 
@@ -55,12 +56,13 @@ Allure is a private, fully offline AI companion designed for deep understanding 
 - [x] Initial design port to React
 - [x] Multi-page routing implementation
 - [x] Presence Core (Canvas Animation)
-- [x] Streaming AI interaction preview
-- [x] Real-time theme customization
+- [x] Atmosphere & Mood-based UI
+- [x] Architecture Manifests (Technical Documentation)
+- [x] Interactive Memory Fragments
 - [ ] Mobile-first UI refinements
-- [ ] Integration with local inference engines (Ollama/Llama.cpp)
-- [ ] Vector database implementation (SQLite-VSS)
-- [ ] Long-term memory synchronization (Encrypted)
+- [ ] Direct local inference integration (Ollama/WebLLM)
+- [ ] Functional Vector Database (SQLite-VSS)
+- [ ] Voice-to-Voice (Whisper Turbo) local processing
 
 ---
 © 2026 Allure AI · Designed for Human Connection · Made in the Void
