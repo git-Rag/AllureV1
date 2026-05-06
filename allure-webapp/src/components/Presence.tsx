@@ -102,12 +102,6 @@ const Presence: React.FC = () => {
       const centerX = drawWidth / 2;
       const centerY = drawHeight / 2;
 
-      // Helper for alpha colors
-      const withAlpha = (hex: string, alpha: number) => {
-        const a = Math.floor(alpha * 255).toString(16).padStart(2, '0');
-        return hex.startsWith('#') ? `${hex}${a}` : hex;
-      };
-
       // Mouse following with easing
       let targetX = centerX;
       let targetY = centerY;
@@ -120,32 +114,36 @@ const Presence: React.FC = () => {
 
       // Draw Background Glow
       const bgGlow = ctx.createRadialGradient(targetX, targetY, 0, targetX, targetY, 200);
-      bgGlow.addColorStop(0, withAlpha(accentColor, 0.13));
+      bgGlow.addColorStop(0, `${accentColor}22`);
       bgGlow.addColorStop(1, 'transparent');
       ctx.fillStyle = bgGlow;
       ctx.fillRect(0, 0, drawWidth, drawHeight);
 
       // Draw Particles
+      ctx.fillStyle = accentColor;
       particles.forEach(p => {
         p.update();
-        p.draw(ctx, targetX, targetY, accentColor);
+        ctx.globalAlpha = p.opacity;
+        ctx.beginPath();
+        ctx.arc(targetX + p.x, targetY + p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
       });
+      ctx.globalAlpha = 1.0;
 
       // Draw Organic Core
       ctx.globalCompositeOperation = 'screen';
       
       const drawShell = (radius: number, opacity: number, noiseScale: number, speedMult: number) => {
         ctx.beginPath();
-        const segments = 80;
+        const segments = 60; // Slightly reduced segments for performance
         for (let i = 0; i <= segments; i++) {
           const angle = (i / segments) * Math.PI * 2;
           
           const noise = 
             Math.sin(angle * 3 + time * speedMult) * (noiseScale * 0.5) + 
-            Math.sin(angle * 5 - time * 0.7 * speedMult) * (noiseScale * 0.3) +
-            Math.cos(angle * 2 + time * 1.2 * speedMult) * (noiseScale * 0.2);
+            Math.sin(angle * 5 - time * 0.7 * speedMult) * (noiseScale * 0.3);
           
-          const r = radius + noise + Math.sin(time * 0.5) * 10; // Base radius + noise + breathing
+          const r = radius + noise + Math.sin(time * 0.5) * 10;
           const x = targetX + Math.cos(angle) * r;
           const y = targetY + Math.sin(angle) * r;
 
@@ -155,14 +153,14 @@ const Presence: React.FC = () => {
         ctx.closePath();
 
         const grad = ctx.createRadialGradient(targetX, targetY, 0, targetX, targetY, radius + noiseScale);
-        grad.addColorStop(0, withAlpha(accentColor, opacity));
+        grad.addColorStop(0, `${accentColor}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`);
         grad.addColorStop(1, 'transparent');
         
         ctx.fillStyle = grad;
         ctx.fill();
       };
 
-      // Layered shells for depth
+      // Layered shells
       drawShell(80, 0.4, 30, 1.0);
       drawShell(60, 0.6, 20, 1.5);
       drawShell(30, 0.8, 10, 2.0);
@@ -171,7 +169,7 @@ const Presence: React.FC = () => {
       ctx.beginPath();
       ctx.arc(targetX, targetY, 5 + Math.sin(time * 2) * 2, 0, Math.PI * 2);
       ctx.fillStyle = '#fff';
-      ctx.shadowBlur = 20;
+      ctx.shadowBlur = 15;
       ctx.shadowColor = accentColor;
       ctx.fill();
       ctx.shadowBlur = 0;

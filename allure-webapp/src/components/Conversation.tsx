@@ -25,28 +25,30 @@ const Conversation: React.FC = () => {
   // Typewriter effect for initial messages
   const typeText = async (text: string, callback: (current: string) => void) => {
     let current = '';
-    for (let i = 0; i < text.length; i++) {
-      current += text[i];
+    const chars = Array.from(text);
+    for (const char of chars) {
+      current += char;
       callback(current);
-      await new Promise(resolve => setTimeout(resolve, 20 + Math.random() * 20));
+      // Faster, more consistent typewriter
+      await new Promise(resolve => setTimeout(resolve, 15));
     }
   };
 
   // Intersection Observer to trigger animation
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !hasStarted) {
           setHasStarted(true);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 } // More sensitive for better UX
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    observer.observe(section);
     return () => observer.disconnect();
   }, [hasStarted]);
 
@@ -58,26 +60,31 @@ const Conversation: React.FC = () => {
       for (const msg of INITIAL_MESSAGES) {
         if (!isMounted) break;
         if (msg.role === 'bot') {
-          const newMsg: Message = { ...msg, content: '', isTyping: true };
-          setDisplayedMessages(prev => [...prev, newMsg]);
+          setDisplayedMessages(prev => [...prev, { ...msg, content: '', isTyping: true }]);
+          
           await typeText(msg.content, (text) => {
             if (isMounted) {
               setDisplayedMessages(prev => {
-                const last = [...prev];
-                const updated = { ...last[last.length - 1], content: text };
-                last[last.length - 1] = updated;
-                return last;
+                const lastIdx = prev.length - 1;
+                if (prev[lastIdx]?.role === 'bot') {
+                  const updated = [...prev];
+                  updated[lastIdx] = { ...updated[lastIdx], content: text };
+                  return updated;
+                }
+                return prev;
               });
             }
           });
+
           if (isMounted) {
             setDisplayedMessages(prev => {
-              const last = [...prev];
-              const updated = { ...last[last.length - 1], isTyping: false };
-              last[last.length - 1] = updated;
-              return last;
+              const lastIdx = prev.length - 1;
+              const updated = [...prev];
+              updated[lastIdx] = { ...updated[lastIdx], isTyping: false };
+              return updated;
             });
           }
+          await new Promise(resolve => setTimeout(resolve, 600));
         } else {
           setDisplayedMessages(prev => [...prev, msg]);
           await new Promise(resolve => setTimeout(resolve, 800));
