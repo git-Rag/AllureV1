@@ -6,10 +6,12 @@
  * 2. Update the fetch URL and headers according to the provider.
  */
 
+import type { OnChunkCallback, OnFinishCallback } from '@/types/ai';
+
 export const fetchAIResponseStream = async (
   prompt: string, 
-  onChunk: (text: string) => void,
-  onFinish: () => void
+  onChunk: OnChunkCallback,
+  onFinish: OnFinishCallback
 ) => {
   const API_KEY = import.meta.env.VITE_AI_API_KEY;
   

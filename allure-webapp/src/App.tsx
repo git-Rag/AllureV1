@@ -1,36 +1,35 @@
-import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Tweaks from './components/Tweaks';
-import LandingPage from './pages/LandingPage';
-import EthicsPage from './pages/EthicsPage';
-import WaitlistModal from './components/WaitlistModal';
+import MainLayout from '@/components/layout/MainLayout';
+import LandingPage from '@/pages/LandingPage';
+import EthicsPage from '@/pages/EthicsPage';
+import WaitlistModal from '@/components/common/WaitlistModal';
+import { UIProvider, useUI } from '@/context/UIContext';
 
-function App() {
-  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+const AppContent = () => {
+  const { isWaitlistOpen, closeWaitlist } = useUI();
 
   return (
     <Router>
-      <div className="app-root">
-        <Tweaks />
-        <Header onWaitlistClick={() => setIsWaitlistOpen(true)} />
-        
-        <main>
-          <Routes>
-            <Route path="/" element={<LandingPage onWaitlistClick={() => setIsWaitlistOpen(true)} />} />
-            <Route path="/ethics" element={<EthicsPage />} />
-          </Routes>
-        </main>
+      <MainLayout>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/ethics" element={<EthicsPage />} />
+        </Routes>
+      </MainLayout>
 
-        <Footer />
-
-        <WaitlistModal 
-          isOpen={isWaitlistOpen} 
-          onClose={() => setIsWaitlistOpen(false)} 
-        />
-      </div>
+      <WaitlistModal 
+        isOpen={isWaitlistOpen} 
+        onClose={closeWaitlist} 
+      />
     </Router>
+  );
+};
+
+function App() {
+  return (
+    <UIProvider>
+      <AppContent />
+    </UIProvider>
   );
 }
 

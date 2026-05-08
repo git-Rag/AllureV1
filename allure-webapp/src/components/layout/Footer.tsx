@@ -4,7 +4,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="container">
-        <span className="logo">Allure</span>
+        <span className="logo">ALLURE</span>
         <div className="links">
           <a href="#">Security Audit</a>
           <a href="#">Manifesto</a>

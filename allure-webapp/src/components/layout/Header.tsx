@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useUI } from '@/context/UIContext';
 
-interface HeaderProps {
-  onWaitlistClick: () => void;
-}
+const Header: React.FC = () => {
+  const { openWaitlist } = useUI();
 
-const Header: React.FC<HeaderProps> = ({ onWaitlistClick }) => {
   return (
     <header className="topnav">
       <div className="container topnav-inner">
-        <Link to="/" className="logo">Allure</Link>
+        <Link to="/" className="logo">ALLURE</Link>
         <nav style={{ display: 'flex', gap: '32px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           <a href="/#features">Features</a>
           <a href="/#conversation">Companion</a>
@@ -19,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ onWaitlistClick }) => {
         <button 
           className="btn btn-primary" 
           style={{ padding: '8px 16px' }}
-          onClick={onWaitlistClick}
+          onClick={openWaitlist}
         >
           Waitlist
         </button>

@@ -1,22 +1,20 @@
 import React from 'react';
-import Hero from '../components/Hero';
-import Features from '../components/Features';
-import Architecture from '../components/Architecture';
-import Conversation from '../components/Conversation';
-import Timeline from '../components/Timeline';
-import Privacy from '../components/Privacy';
-import useAnimateOnScroll from '../hooks/useAnimateOnScroll';
+import Hero from '@/components/landing/Hero';
+import Features from '@/components/landing/Features';
+import Architecture from '@/components/landing/Architecture';
+import Conversation from '@/components/landing/Conversation';
+import Timeline from '@/components/landing/Timeline';
+import Privacy from '@/components/landing/Privacy';
+import useAnimateOnScroll from '@/hooks/useAnimateOnScroll';
+import { useUI } from '@/context/UIContext';
 
-interface LandingPageProps {
-  onWaitlistClick: () => void;
-}
-
-const LandingPage: React.FC<LandingPageProps> = ({ onWaitlistClick }) => {
+const LandingPage: React.FC = () => {
   useAnimateOnScroll();
+  const { openWaitlist } = useUI();
 
   return (
     <>
-      <Hero onWaitlistClick={onWaitlistClick} />
+      <Hero onWaitlistClick={openWaitlist} />
       <Features />
       <Architecture />
       <Conversation />

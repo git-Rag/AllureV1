@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchAIResponseStream } from '../services/ai';
+import { fetchAIResponseStream } from '@/services/ai';
 
 interface Message {
   role: 'bot' | 'user';
@@ -131,7 +131,7 @@ const Conversation: React.FC = () => {
 
     await fetchAIResponseStream(
       inputValue,
-      (text) => {
+      (text: string) => {
         setDisplayedMessages(prev => {
           const last = [...prev];
           const updated = { ...last[last.length - 1], content: text };
