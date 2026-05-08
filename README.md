@@ -9,17 +9,29 @@ Allure is a private, fully offline AI companion designed for deep understanding 
 
 ## Key Features
 - **Presence Core:** An organic, canvas-based visual representation of the AI that responds to user proximity and system state.
-- **Atmosphere (Moods):** Real-time environmental shifts (Rain, Wind, Fire, Silence) that alter system colors, shaders, and animations.
+- **Atmosphere (Moods):** Real-time environmental shifts (Rain, Wind, Fire, Silence) that alter system colors, shaders, and animations via a dedicated `Tweaks` panel.
+- **AI Conversation:** A specialized streaming interface for natural, emotionally-aware dialogue.
 - **Architecture Manifests:** Technical deep-dives into the local-first stack, including quantized Llama models and encrypted vector storage.
 - **Memory Fragments:** A high-entropy timeline of past interactions, visualized through dynamic vector paths and latent-space snippets.
-- **Aesthetic Sovereignty:** A brutalist-experimental design built with Vanilla CSS, supporting real-time theme tweaking and organic motion.
 
 ## Tech Stack
-- **Framework:** [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Framework:** [React 19](https://react.dev/) + [Vite 6](https://vitejs.dev/)
+- **Language:** [TypeScript 6.0](https://www.typescriptlang.org/)
 - **Navigation:** [React Router 7](https://reactrouter.com/)
-- **Styling:** Vanilla CSS with [OKLCH](https://oklch.com/) color space and CSS Custom Properties
-- **Animation:** Canvas API (Presence Core), SVG-in-JS (Memory Vectors), and Intersection Observer
-- **AI Service:** Integration with local-first inference concepts (Llama 3B, Whisper Turbo) and Gemini API fallback.
+- **Styling:** Vanilla CSS with [OKLCH](https://oklch.com/) color space and modular CSS architecture.
+- **State Management:** React Context API (`UIContext`) for centralized UI state and modal management.
+
+## Project Structure
+The codebase follows a modular, feature-based architecture:
+
+- `src/components/layout/`: Global shell components (MainLayout, Header, Footer, Tweaks).
+- `src/components/landing/`: Feature-specific sections for the primary landing page (Hero, Conversation, Features, etc.).
+- `src/components/common/`: Shared business logic components (e.g., WaitlistModal).
+- `src/context/`: Global application state (UIContext).
+- `src/styles/`: Centralized design system (`main.css`).
+- `src/types/`: Centralized TypeScript definitions and interfaces.
+- `src/services/`: AI and system-level integrations.
+- `src/pages/`: Main application route views (LandingPage, EthicsPage).
 
 ## Getting Started
 
@@ -36,7 +48,7 @@ Allure is a private, fully offline AI companion designed for deep understanding 
    ```bash
    npm install
    ```
-3. (Optional) Add your Google AI API key to `.env`:
+3. (Optional) Add your Google AI API key to `.env` to enable real streaming:
    ```env
    VITE_AI_API_KEY=your_key_here
    ```
@@ -45,21 +57,17 @@ Allure is a private, fully offline AI companion designed for deep understanding 
    npm run dev
    ```
 
-## Project Structure
-- `src/components/`: Modular UI components (Hero, Presence, Tweaks, etc.)
-- `src/pages/`: Main application views (Landing, Ethics)
-- `src/services/`: AI and system services
-- `src/hooks/`: Custom React hooks for animations and state
-- `src/index.css`: Global design tokens and base styles
+### Production Build
+```bash
+npm run build
+```
 
 ## Roadmap
-- [x] Initial design port to React
-- [x] Multi-page routing implementation
+- [x] Modernized React 19 / TS 6.0 Architecture
+- [x] Path Aliasing (`@/`) for clean imports
 - [x] Presence Core (Canvas Animation)
 - [x] Atmosphere & Mood-based UI
-- [x] Architecture Manifests (Technical Documentation)
-- [x] Interactive Memory Fragments
-- [ ] Mobile-first UI refinements
+- [x] Centralized State Management (UIContext)
 - [ ] Direct local inference integration (Ollama/WebLLM)
 - [ ] Functional Vector Database (SQLite-VSS)
 - [ ] Voice-to-Voice (Whisper Turbo) local processing
