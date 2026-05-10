@@ -3,6 +3,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import LandingPage from '@/pages/LandingPage';
 import EthicsPage from '@/pages/EthicsPage';
 import WaitlistModal from '@/components/common/WaitlistModal';
+import AudioManager from '@/components/common/AudioManager';
 import { UIProvider, useUI } from '@/context/UIContext';
 
 const AppContent = () => {
@@ -10,6 +11,7 @@ const AppContent = () => {
 
   return (
     <Router>
+      <AudioManager />
       <MainLayout>
         <Routes>
           <Route path="/" element={<LandingPage />} />
