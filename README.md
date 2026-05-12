@@ -28,7 +28,7 @@ The codebase follows a modular, feature-based architecture:
 
 - `src/components/layout/`: Global shell components (MainLayout, Header, Footer, Tweaks).
 - `src/components/landing/`: Feature-specific sections for the primary landing page (Hero, Conversation, Features, etc.).
-- `src/components/common/`: Shared business logic components (e.g., WaitlistModal, AudioManager).
+- `src/components/common/`: Shared business logic components (e.g., WaitlistModal).
 - `src/context/`: Global application state (UIContext).
 - `src/styles/`: Centralized design system (`main.css`).
 - `src/services/`: AI and system-level integrations.

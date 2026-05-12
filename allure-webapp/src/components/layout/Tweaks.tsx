@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useUI } from '@/context/UIContext';
 
 const Tweaks: React.FC = () => {
   const [accent, setAccent] = useState('#df5858');
   const [radius, setRadius] = useState('0px');
   const [mood, setMood] = useState('rain');
-  const { isMusicPlaying, toggleMusic } = useUI();
 
   // Initial mood set
   React.useEffect(() => {
@@ -49,23 +47,6 @@ const Tweaks: React.FC = () => {
       <div className="tweak-row">
         <span>System Status</span>
         <div className="tweak-dot"></div>
-      </div>
-      <div className="tweak-row">
-        <span>Sonics</span>
-        <button 
-          onClick={toggleMusic} 
-          className={`tweak-toggle ${isMusicPlaying ? 'active' : ''}`}
-          style={{ 
-            fontSize: '9px', 
-            border: '1px solid var(--border)', 
-            padding: '2px 8px',
-            background: isMusicPlaying ? 'var(--accent)' : 'transparent',
-            color: isMusicPlaying ? 'var(--bg)' : 'var(--fg)',
-            transition: 'all 0.2s'
-          }}
-        >
-          {isMusicPlaying ? 'ON' : 'OFF'}
-        </button>
       </div>
       <div className="tweak-row">
         <span>Accent</span>
