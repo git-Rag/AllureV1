@@ -1,0 +1,123 @@
+.scenarios-header {
+  margin-bottom: 80px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  align-items: start; /* Prevent cards in same row from stretching weirdly */
+}
+
+@media (max-width: 1024px) {
+  .scenarios-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scenario-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 40px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+
+.scenario-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.scenario-card.active {
+  background: var(--bg);
+  border-color: var(--accent);
+}
+
+.scenario-number {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.scenario-category {
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.scenario-card h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  transition: color 0.3s ease;
+  line-height: 1.2;
+}
+
+.scenario-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.scenario-footer {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.scenario-toggle {
+  font-size: 10px;
+  color: var(--accent);
+  padding: 0;
+  background: transparent;
+  border: none;
+  text-align: left;
+  opacity: 0.6;
+  pointer-events: none; /* Let the card handle the click */
+}
+
+.scenario-preview {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scenario-card.active .scenario-preview {
+  grid-template-rows: 1fr;
+}
+
+.preview-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.preview-bubble {
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  background: var(--surface);
+}
+
+.preview-bubble.user {
+  border-left: 3px solid var(--accent);
+  margin-top: 24px;
+}
+
+.preview-bubble.allure {
+  border-left: 3px solid var(--fg);
+  margin-left: 20px;
+  color: var(--muted);
+}

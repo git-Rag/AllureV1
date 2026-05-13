@@ -1,42 +1,117 @@
 .arch-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  align-items: stretch;
-}
-
-@media (max-width: 900px) {
-  .arch-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.arch-grid > [data-animate] {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: transparent;
+  border: none;
 }
 
 .arch-cell {
-  background: var(--bg);
-  padding: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 0;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   height: 100%;
 }
 
-.arch-cell:hover {
+.arch-cell.is-active {
+  border-color: var(--accent);
+  background: var(--bg);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  transform: translateX(10px);
+}
+
+.arch-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 8px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.stat-value {
+  font-size: 11px;
+  color: var(--fg);
+}
+
+/* Stack Diagram Styles */
+.stack-diagram {
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  perspective: 1000px;
+}
+
+.stack-layer {
+  height: 48px;
   background: var(--surface);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  transform: rotateX(45deg) rotateZ(-15deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+}
+
+.stack-layer:hover, .stack-layer.active {
+  background: var(--bg);
+  border-color: var(--accent);
+  transform: rotateX(45deg) rotateZ(-15deg) translateZ(20px);
+  box-shadow: 20px 20px 0 rgba(0,0,0,0.4);
+}
+
+.stack-layer.active .layer-label {
+  color: var(--accent);
+}
+
+.layer-label {
+  font-size: 10px;
+  color: var(--muted);
+  transform: rotateZ(15deg);
+}
+
+.stack-base {
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+}
+
+@media (max-width: 900px) {
+  .stack-diagram {
+    display: none;
+  }
 }
 
 .arch-cell-header {
   display: flex;
   flex-direction: column;
   z-index: 2;
-  gap: 8px;
+  gap: 4px;
 }
 
 .manifesto-toggle {
@@ -44,7 +119,7 @@
   color: var(--accent);
   text-align: left;
   padding: 0;
-  margin-top: 12px;
+  margin-top: 24px;
   opacity: 0.6;
   transition: opacity 0.3s ease, letter-spacing 0.3s ease;
   width: fit-content;
